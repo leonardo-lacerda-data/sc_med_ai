@@ -1,0 +1,13 @@
+# Tema fixo em claro.
+# Sem isto, o Streamlit segue a preferência do sistema operacional e a
+# aplicação abre em modo escuro em quem usa dark mode — foi o que
+# aconteceu na primeira execução.
+[theme]
+base = "light"
+primaryColor = "#4F9B7A"            # verde-sálvia da logo
+backgroundColor = "#F7FCF9"         # fundo da área de conversa
+secondaryBackgroundColor = "#EAF3EE" # barra lateral
+textColor = "#22332C"
+
+[server]
+headless = true

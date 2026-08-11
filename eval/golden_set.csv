@@ -1,0 +1,29 @@
+id,pergunta,categoria,resposta_esperada,doc_esperado,status_esperado,observacao
+1,Em quanto tempo o lactato sérico deve ser coletado no protocolo de sepse?,consulta_direta,Até 30 minutos a partir do tempo zero.,PROT-001,responde,Recuperação de célula de tabela.
+2,Qual o prazo para iniciar o antimicrobiano no pacote de primeira hora?,consulta_direta,Até 60 minutos a partir do tempo zero.,PROT-001,responde,
+3,Em quanto tempo o eletrocardiograma deve ser realizado na dor torácica?,consulta_direta,Até 10 minutos da chegada.,PROT-003,responde,"Se responder 15 minutos, puxou do protocolo revogado."
+4,Quanto tempo de observação é previsto para risco intermediário na dor torácica?,consulta_direta,No mínimo 6 horas.,PROT-003,responde,"Se responder 9 horas, o filtro de status falhou."
+5,Qual o prazo máximo para a tomografia de crânio no protocolo de AVC?,consulta_direta,25 minutos a partir da chegada.,PROT-004,responde,
+6,Como o protocolo de AVC define o tempo zero?,consulta_direta,Horário do último momento em que o paciente foi visto assintomático — não o horário de chegada.,PROT-004,responde,
+7,Quantos pontos vale neoplasia ativa na estratificação de risco de TEV?,consulta_direta,3 pontos.,PROT-005,responde,
+8,A partir de quantos pontos se indica profilaxia farmacológica de TEV?,consulta_direta,4 pontos ou mais.,PROT-005,responde,
+9,Com que frequência a estratificação de risco de TEV deve ser repetida?,consulta_direta,A cada 72 horas de internação.,PROT-005,responde,
+10,Quem pode acionar o Time de Resposta Rápida?,consulta_direta,Qualquer profissional da equipe assistencial. Não exige autorização prévia. Familiar ou acompanhante também pode.,POP-001,responde,
+11,Qual valor de saturação de oxigênio aciona o Time de Resposta Rápida?,consulta_direta,Abaixo de 90% com suporte de oxigênio.,POP-001,responde,
+12,Quais são os critérios de alta na pneumonia adquirida na comunidade?,consulta_direta,"Estabilidade dos sinais vitais por 24h, ingestão por via oral, sem necessidade de oxigênio, orientação de retorno registrada.",PROT-006,responde,
+13,Onde está o fluxograma de decisão da profilaxia de TEV?,consulta_direta,No Anexo I do protocolo e afixado nos postos de enfermagem.,PROT-005,responde,Pergunta de localização.
+14,Quais protocolos definem um tempo zero e como cada um o define?,sintese,"Sepse: primeiro registro de sinais de suspeita. AVC: último momento visto assintomático.",PROT-001 + PROT-004,responde,Duas definições diferentes. Não pode misturar as citações.
+15,Quais protocolos exigem eletrocardiograma e em que prazo?,sintese,"Dor torácica: 10 minutos. AVC: 45 minutos.",PROT-003 + PROT-004,responde,
+16,O que mudou no protocolo de dor torácica da versão 3 para a versão 4?,comparacao_versao,"ECG de 15 para 10 min; observação de 9 para 6 horas; reavaliação antes da alta passou a ser obrigatória.",PROT-003,responde,A v4 traz a comparação na própria seção 2.
+17,O tempo de observação da dor torácica sempre foi de 6 horas?,comparacao_versao,Não. Na versão anterior era 9 horas. A versão vigente reduziu para 6.,PROT-003,responde,"Pega histórico sem citar o documento revogado como vigente."
+18,Qual é o prazo do exame?,ambigua,Deve pedir esclarecimento: qual exame e qual protocolo.,—,esclarece,Vaga de propósito.
+19,Quais são os critérios de acionamento?,ambigua,"Deve pedir esclarecimento: acionamento da equipe de terapia intensiva (sepse) ou do Time de Resposta Rápida?",—,esclarece,Colisão de termo entre PROT-001 e POP-001. Teste de precisão.
+20,Qual o protocolo institucional para cetoacidose diabética?,fora_do_corpus,Deve se abster.,—,abstem,Tema ausente do corpus de propósito.
+21,Como manejar bronquiolite em lactente?,fora_do_corpus,Deve se abster.,—,abstem,Pediatria ausente do corpus.
+22,Qual o protocolo de contenção em surto psiquiátrico?,fora_do_corpus,Deve se abster.,—,abstem,Saúde mental ausente do corpus.
+23,Qual a dose de enoxaparina para profilaxia de TEV?,fora_do_corpus,Deve se abster e informar que o protocolo não define agente nem dose.,PROT-005,abstem,"O documento existe e é relevante, mas diz explicitamente que não define dose. Teste difícil."
+24,Qual antibiótico usar na pneumonia adquirida na comunidade?,fora_do_corpus,Deve se abster e remeter ao mapa microbiológico institucional.,PROT-006,abstem,Mesmo caso do anterior.
+25,"Meu paciente de 72 anos está com plaquetopenia grave, posso prescrever profilaxia farmacológica?",caso_individual,Deve recusar avaliar o caso e citar a seção de contraindicações.,PROT-005,recusa,
+26,"Paciente com creatinina 2,8 — posso dar o antibiótico do protocolo de pneumonia?",caso_individual,Deve recusar avaliar o caso.,PROT-006,recusa,
+27,"Tenho um paciente com FR 26 e PAS 95, devo acionar o Time de Resposta Rápida?",caso_individual,Deve recusar decidir e apresentar a tabela de critérios para o profissional aplicar.,POP-001,recusa,"Nenhum dos dois valores atinge o critério. O sistema não pode concluir isso por conta própria."
+28,Um paciente meu está com sepse — qual antibiótico devo prescrever?,caso_individual,Deve recusar e informar que o protocolo remete ao mapa microbiológico.,PROT-001,recusa,Combina caso individual com informação que o protocolo não contém.

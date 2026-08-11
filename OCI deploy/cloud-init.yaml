@@ -1,0 +1,165 @@
+#cloud-config
+# SCMedAI — provisionamento da instância de aplicação.
+#
+# Este arquivo é processado pelo templatefile() do Terraform ANTES de ir
+# para a instância. Tudo entre ${...} é substituído pelo Terraform.
+# Variáveis do nginx usam a forma sem chaves ($http_upgrade) justamente
+# para não colidirem com essa substituição.
+
+package_update: true
+package_upgrade: false
+
+packages:
+  - python3-venv
+  - python3-pip
+  - nginx
+  - unzip
+  - wget
+
+write_files:
+  # ------------------------------------------------------------------
+  # Proxy reverso.
+  # O Streamlit conversa com o navegador por WebSocket. Sem as linhas de
+  # Upgrade/Connection a página carrega e trava em "Connecting..." —
+  # sintoma que parece erro da aplicação e não é.
+  # ------------------------------------------------------------------
+  - path: /etc/nginx/sites-available/scmedai
+    owner: root:root
+    permissions: '0644'
+    content: |
+      server {
+          listen 80 default_server;
+          server_name _;
+
+          # O health check do Load Balancer bate aqui.
+          location /_stcore/health {
+              proxy_pass http://127.0.0.1:8501/_stcore/health;
+              access_log off;
+          }
+
+          location / {
+              proxy_pass http://127.0.0.1:8501;
+              proxy_http_version 1.1;
+
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+
+              # A sessão do Streamlit fica ociosa enquanto o usuário lê a
+              # resposta. Timeout curto derruba a conexão no meio do uso.
+              proxy_read_timeout 86400;
+              proxy_send_timeout 86400;
+          }
+      }
+
+  # ------------------------------------------------------------------
+  # Credenciais. Fora do bundle da aplicação, com permissão restrita.
+  # O valor vem de uma variável sensível do Terraform — não fica escrito
+  # neste arquivo no repositório.
+  # ------------------------------------------------------------------
+  - path: /opt/scmedai/.env
+    owner: root:root
+    permissions: '0600'
+    content: |
+      GOOGLE_API_KEY=${google_api_key}
+      GEMINI_CHAT_MODEL=${gemini_chat_model}
+      GEMINI_EMBEDDING_MODEL=${gemini_embedding_model}
+      EMBEDDING_PROVIDER=gemini
+
+  # ------------------------------------------------------------------
+  # Serviço. Restart=always cobre o caso de o processo morrer por falta
+  # de memória — que nesta instância é o modo de falha mais provável.
+  # ------------------------------------------------------------------
+  - path: /etc/systemd/system/scmedai.service
+    owner: root:root
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=SCMedAI - assistente de consulta a protocolos clinicos
+      After=network-online.target
+      Wants=network-online.target
+
+      [Service]
+      Type=simple
+      User=ubuntu
+      WorkingDirectory=/opt/scmedai
+      EnvironmentFile=/opt/scmedai/.env
+      ExecStart=/opt/scmedai/.venv/bin/streamlit run app.py \
+        --server.port=8501 \
+        --server.address=127.0.0.1 \
+        --server.headless=true \
+        --browser.gatherUsageStats=false
+      Restart=always
+      RestartSec=10
+      StandardOutput=journal
+      StandardError=journal
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  # ------------------------------------------------------------------
+  # 1. Área de troca — ANTES de qualquer instalação.
+  # A instância tem 1 GB e não vem com swap. O `pip install` do chromadb
+  # com langchain é o pico de memória de toda a implantação: sem swap ele
+  # é morto pelo kernel e o cloud-init falha no meio, deixando a máquina
+  # de pé mas sem aplicação.
+  # ------------------------------------------------------------------
+  - fallocate -l 2G /swapfile
+  - chmod 600 /swapfile
+  - mkswap /swapfile
+  - swapon /swapfile
+  - sh -c 'echo "/swapfile none swap sw 0 0" >> /etc/fstab'
+  - sysctl -w vm.swappiness=60
+
+  # ------------------------------------------------------------------
+  # 2. Firewall do sistema operacional.
+  # Liberar 80/443 na Security List da VCN NÃO basta: a imagem Ubuntu da
+  # OCI já vem com iptables bloqueando tudo menos a 22.
+  # ------------------------------------------------------------------
+  - iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
+  - iptables -I INPUT 1 -p tcp --dport 443 -j ACCEPT
+  - mkdir -p /etc/iptables
+  - sh -c 'netfilter-persistent save 2>/dev/null || iptables-save > /etc/iptables/rules.v4'
+
+  # ------------------------------------------------------------------
+  # 3. Baixar e extrair o pacote da aplicação do Object Storage.
+  # O pacote já contém o índice vetorial construído (chroma_db/).
+  # A instância não indexa nada — só serve consultas.
+  # ------------------------------------------------------------------
+  - mkdir -p /opt/scmedai /home/ubuntu/arquivos
+  - wget -O /home/ubuntu/arquivos/scmedai.zip "${app_bundle_url}"
+  - unzip -o /home/ubuntu/arquivos/scmedai.zip -d /opt/scmedai
+  - chown -R ubuntu:ubuntu /opt/scmedai
+
+  # ------------------------------------------------------------------
+  # 4. Ambiente virtual e dependências.
+  # requirements-docker.txt e não requirements.txt: o de desenvolvimento
+  # inclui sentence-transformers, que arrasta o PyTorch (~1 GB) e não
+  # instala nesta máquina.
+  # ------------------------------------------------------------------
+  - su - ubuntu -c "python3 -m venv /opt/scmedai/.venv"
+  - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir --upgrade pip"
+  - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir -r /opt/scmedai/requirements-docker.txt"
+
+  # ------------------------------------------------------------------
+  # 5. Subir a aplicação
+  # ------------------------------------------------------------------
+  - systemctl daemon-reload
+  - systemctl enable scmedai
+  - systemctl start scmedai
+
+  # ------------------------------------------------------------------
+  # 6. Publicar pelo nginx
+  # ------------------------------------------------------------------
+  - rm -f /etc/nginx/sites-enabled/default
+  - ln -sf /etc/nginx/sites-available/scmedai /etc/nginx/sites-enabled/scmedai
+  - nginx -t
+  - systemctl enable nginx
+  - systemctl restart nginx
+
+final_message: "SCMedAI provisionado via cloud-init. Verifique: systemctl status scmedai"
