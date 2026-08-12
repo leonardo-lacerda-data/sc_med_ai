@@ -11,28 +11,11 @@ resource "oci_load_balancer_load_balancer" "Load_Balancer" {
   }
 }
 
-# Certificado SSL (HTTPS) — habilite quando tiver o par de arquivos.
-/*resource "oci_load_balancer_certificate" "cert_https" {
-  load_balancer_id = oci_load_balancer_load_balancer.Load_Balancer.id
-  certificate_name = "cert-scmedai"
-
-  public_certificate = file("${path.module}/certs/cert.pem")
-  private_key        = file("${path.module}/certs/key.pem")
-
-  passphrase = var.cert_passphrase
-}
-*/
-
 resource "oci_load_balancer_backend_set" "web-servers-backend" {
   load_balancer_id = oci_load_balancer_load_balancer.Load_Balancer.id
   name             = "web-servers-backend"
   policy           = "ROUND_ROBIN"
 
-  # O Streamlit é STATEFUL: o estado da conversa vive na memória do
-  # processo, não em banco. Sem persistência de sessão, o round-robin
-  # manda o usuário para a outra instância e o histórico "some".
-  # O cookie emitido pelo próprio balanceador prende cada usuário a um
-  # backend enquanto a sessão durar.
   session_persistence_configuration {
     cookie_name      = "X-Oracle-BMC-LBS-Route"
     disable_fallback = false
@@ -46,10 +29,7 @@ resource "oci_load_balancer_backend_set" "web-servers-backend" {
     retries             = "3"
     return_code         = "200"
     timeout_in_millis   = "3000"
-
-    # Endpoint de saúde do próprio Streamlit. Melhor que "/": responde
-    # rápido, não renderiza a página inteira e não conta como sessão.
-    url_path = "/_stcore/health"
+    url_path            = "/_stcore/health"
   }
 }
 
@@ -66,27 +46,8 @@ resource "oci_load_balancer_backend" "app" {
   weight           = "1"
 }
 
-/*resource "oci_load_balancer_listener" "lb-listener-https" {
-  connection_configuration {
-    idle_timeout_in_seconds = "300"
-  }
-  default_backend_set_name = oci_load_balancer_backend_set.web-servers-backend.name
-  load_balancer_id         = oci_load_balancer_load_balancer.Load_Balancer.id
-  name                     = "lb-listener-https"
-  port                     = "443"
-  protocol                 = "HTTP"
-  ssl_configuration {
-    certificate_name        = oci_load_balancer_certificate.cert_https.certificate_name
-    verify_peer_certificate = false
-    protocols               = ["TLSv1.2"]
-  }
-}
-*/
-
 resource "oci_load_balancer_listener" "lb-listener-http" {
   connection_configuration {
-    # O padrão de 60s derruba a conexão WebSocket do Streamlit enquanto o
-    # usuário lê a resposta, e a tela volta para "Connecting...".
     idle_timeout_in_seconds = "300"
   }
   default_backend_set_name = oci_load_balancer_backend_set.web-servers-backend.name

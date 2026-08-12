@@ -1,11 +1,3 @@
-# Compute Instances
-#
-# Nota sobre templatefile(): o provider `template` (data "template_file")
-# está arquivado e não roda em todos os ambientes do Resource Manager.
-# A função nativa templatefile() faz o mesmo e ainda permite injetar
-# variáveis — que é como a chave da API chega na instância sem ficar
-# escrita no repositório.
-
 locals {
   user_data = templatefile("${path.module}/cloud-init.yaml", {
     app_bundle_url         = var.app_bundle_url
