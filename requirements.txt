@@ -6,17 +6,10 @@ langchain-google-genai      # LLM + embeddings do Gemini
 langchain-chroma            # integração com o banco vetorial
 langchain-text-splitters
 chromadb
-langchain_huggingface
-sentence-transformers
 
 # Leitura de documentos
 pypdf                       # extração de texto de PDF
 
 # Utilitários
-python-dotenv             
-pandas                   
+python-dotenv
 streamlit
-
-# Testes
-pytest
-
