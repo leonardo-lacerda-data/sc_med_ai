@@ -54,7 +54,7 @@ python -m src.pdf_loader     # carrega PDFs e armazena no ChromaDB
 data/raw/         PDFs originais dos protocolos
 data/metadata.csv ficha de metadados — sem isto, nada é indexado
 data/index/       índice vetorial (artefato de build, não versionado)
-eval/             conjunto de referência e resultados de avaliação
+respostas_esperadas.csv conjunto de referência e resultados de avaliação
 prompts/          prompt de sistema versionado
 src/              ingestão, recuperação, guardrails, cadeia
 ```
