@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo_web.png" alt="SCMedAI" width="200">
+</p>
+
 # SCMedAI
 
 Assistente de consulta a protocolos clínicos para profissionais de saúde.
