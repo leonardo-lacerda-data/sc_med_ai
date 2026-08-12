@@ -1,16 +1,15 @@
 <p align="center">
-  <img src="logo_web.png" alt="SCMedAI" width="200">
+  <img src="logo_web.png" alt="SCMedAI" width="170">
 </p>
 
-# SCMedAI
+<p align="center">
+  <strong>Assistente de consulta a protocolos clínicos para profissionais de saúde.</strong><br>
+  Responde em linguagem natural citando o documento, a versão e a página de origem.
+</p>
 
-Assistente de consulta a protocolos clínicos para profissionais de saúde.
-Responde perguntas em linguagem natural citando o documento, a versão e a
-página de origem.
-
-**Não diagnostica, não prescreve e não decide.**
-
----
+<p align="center">
+  <em>Não diagnostica, não prescreve e não decide.</em>
+</p>
 
 ## O que ele faz
 
