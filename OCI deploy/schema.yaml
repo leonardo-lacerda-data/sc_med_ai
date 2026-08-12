@@ -47,7 +47,7 @@ variables:
     type: string
     required: true
     title: "URL do pacote da aplicação (.zip) no Object Storage"
-    description: "Pre-Authenticated Request de leitura do objeto. Deve conter app.py, src/, prompts/, .streamlit/, chroma_db/ e requirements-docker.txt na raiz do zip."
+    description: "Pre-Authenticated Request de leitura do objeto. Deve conter app.py, src/, prompts/, .streamlit/, chroma_db/ e requirements.txt na raiz do zip."
 
   google_api_key:
     type: password

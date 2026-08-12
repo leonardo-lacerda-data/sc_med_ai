@@ -138,13 +138,12 @@ runcmd:
 
   # ------------------------------------------------------------------
   # 4. Ambiente virtual e dependências.
-  # requirements-docker.txt e não requirements.txt: o de desenvolvimento
-  # inclui sentence-transformers, que arrasta o PyTorch (~1 GB) e não
-  # instala nesta máquina.
+  # --no-cache-dir importa: o cache do pip sozinho estoura a memória
+  # desta instância durante a instalação do chromadb.
   # ------------------------------------------------------------------
   - su - ubuntu -c "python3 -m venv /opt/scmedai/.venv"
   - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir --upgrade pip"
-  - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir -r /opt/scmedai/requirements-docker.txt"
+  - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir -r /opt/scmedai/requirements.txt"
 
   # ------------------------------------------------------------------
   # 5. Subir a aplicação

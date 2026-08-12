@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-GOLDEN_SET_CSV = Path("eval") / "golden_set.csv"
 PROMPTS_DIR = Path("prompts")
 
 # --------------------------------------------------------------------
