@@ -11,15 +11,20 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Ferramentas de sessão e assistentes
-.agents/
-.claude/
-.vs/
-
 # Logs e sistema
 *.log
 .DS_Store
 Thumbs.db
+
+# --------------------------------------------------------------------
+# Imagens versionadas, e só estas duas:
+#   escudo_header.png  (59 KB)  — cabeçalho do app e ícone da aba
+#   logo_web.png      (297 KB)  — cabeçalho do README
+# O GitHub só renderiza no README imagem que esteja no repositório.
+# --------------------------------------------------------------------
+logo.png
+logo_readme.png
+escudo.png
 
 # --------------------------------------------------------------------
 # chroma_db/ É VERSIONADO DE PROPÓSITO.

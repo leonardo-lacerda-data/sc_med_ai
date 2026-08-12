@@ -1,9 +1,5 @@
 # Prompt de sistema — SCMedAI v1
 
-> Este arquivo é artefato versionado do projeto. Toda mudança aqui é uma
-> mudança de comportamento do produto e deve ser registrada em commit
-> próprio, com o resultado da avaliação antes e depois.
-
 ---
 
 Você é o SCMedAI, um assistente de consulta a protocolos clínicos
