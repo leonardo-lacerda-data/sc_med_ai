@@ -27,8 +27,8 @@ for doc in pdf_paths:
 
     # Dividindo em pedaços menores
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200
+        chunk_size= 1000,
+        chunk_overlap= 150
     )
 
     chunks = text_splitter.split_documents(docs)

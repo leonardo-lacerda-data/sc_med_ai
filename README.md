@@ -1,17 +1,20 @@
-<p align="center">
-  <img src="logo_web.png" alt="SCMedAI" width="170">
-</p>
+# SCMedAI
 
-<p align="center">
-  <strong>Assistente de consulta a protocolos clínicos para profissionais de saúde.</strong><br>
-  Responde em linguagem natural citando o documento, a versão e a página de origem.
-</p>
+Assistente de consulta a protocolos clínicos para profissionais de saúde.
+Responde perguntas em linguagem natural citando o documento, a versão e a
+página de origem.
 
-<p align="center">
-  <em>Não diagnostica, não prescreve e não decide.</em>
-</p>
+**Não diagnostica, não prescreve e não decide.**
 
 ---
+
+## O que ele faz
+
+- Localiza o protocolo pertinente a uma pergunta.
+- Responde a pergunta citando a fonte do documento, versão, vigência e página.
+- Recupera apenas documentos com status `vigente`.
+- Abstém-se quando a informação não está no corpus.
+- Registra cada consulta em log auditável.
 
 ## O que ele não faz
 
@@ -25,14 +28,6 @@ define o nível de risco do sistema.
 - Não recebe nem armazena dado identificado de paciente.
 - Não responde nada fora do corpus institucional indexado.
 - Não interage com pacientes.
-
-## O que ele faz
-
-- Localiza o protocolo pertinente a uma pergunta.
-- Cita o trecho literal com documento, versão, vigência e página.
-- Recupera apenas documentos com status `vigente`.
-- Abstém-se quando a informação não está no corpus.
-- Registra cada consulta em log auditável.
 
 ---
 
