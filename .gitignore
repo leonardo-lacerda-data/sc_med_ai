@@ -1,37 +1,15 @@
-# Credenciais — NUNCA versionar
 .env
 .streamlit/secrets.toml
 *.pem
 *.key
 
-# Ambiente
 .venv/
 venv/
 __pycache__/
 *.pyc
 .pytest_cache/
+.vscode
 
-# Logs e sistema
 *.log
 .DS_Store
 Thumbs.db
-
-# --------------------------------------------------------------------
-# Imagens versionadas, e só estas duas:
-#   escudo_header.png  (59 KB)  — cabeçalho do app e ícone da aba
-#   logo_web.png      (297 KB)  — cabeçalho do README
-# O GitHub só renderiza no README imagem que esteja no repositório.
-# --------------------------------------------------------------------
-logo.png
-logo_readme.png
-escudo.png
-
-# --------------------------------------------------------------------
-# chroma_db/ É VERSIONADO DE PROPÓSITO.
-#
-# São 2,1 MB. Mantê-lo no repositório permite que qualquer pessoa clone e
-# rode sem precisar reindexar, e é requisito para publicar no Streamlit
-# Community Cloud, que não tem etapa de build.
-#
-# A regra antiga era `data/index/`, caminho que o projeto não usa mais.
-# --------------------------------------------------------------------
