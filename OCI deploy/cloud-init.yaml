@@ -3,8 +3,7 @@
 #
 # Este arquivo é processado pelo templatefile() do Terraform ANTES de ir
 # para a instância. Tudo entre ${...} é substituído pelo Terraform.
-# Variáveis do nginx usam a forma sem chaves ($http_upgrade) justamente
-# para não colidirem com essa substituição.
+# Variáveis do nginx usam a forma $http_upgrade
 
 package_update: true
 package_upgrade: false
@@ -17,12 +16,8 @@ packages:
   - wget
 
 write_files:
-  # ------------------------------------------------------------------
   # Proxy reverso.
-  # O Streamlit conversa com o navegador por WebSocket. Sem as linhas de
-  # Upgrade/Connection a página carrega e trava em "Connecting..." —
-  # sintoma que parece erro da aplicação e não é.
-  # ------------------------------------------------------------------
+  # O Streamlit conversa com o navegador por WebSocket.
   - path: /etc/nginx/sites-available/scmedai
     owner: root:root
     permissions: '0644'
@@ -31,7 +26,6 @@ write_files:
           listen 80 default_server;
           server_name _;
 
-          # O health check do Load Balancer bate aqui.
           location /_stcore/health {
               proxy_pass http://127.0.0.1:8501/_stcore/health;
               access_log off;
@@ -56,11 +50,8 @@ write_files:
           }
       }
 
-  # ------------------------------------------------------------------
   # Credenciais. Fora do bundle da aplicação, com permissão restrita.
-  # O valor vem de uma variável sensível do Terraform — não fica escrito
-  # neste arquivo no repositório.
-  # ------------------------------------------------------------------
+  # O valor vem de uma variável sensível do Terraform
   - path: /opt/scmedai/.env
     owner: root:root
     permissions: '0600'
@@ -138,12 +129,13 @@ runcmd:
 
   # ------------------------------------------------------------------
   # 4. Ambiente virtual e dependências.
-  # --no-cache-dir importa: o cache do pip sozinho estoura a memória
-  # desta instância durante a instalação do chromadb.
+  # requirements-docker.txt e não requirements.txt: o de desenvolvimento
+  # inclui sentence-transformers, que arrasta o PyTorch (~1 GB) e não
+  # instala nesta máquina.
   # ------------------------------------------------------------------
   - su - ubuntu -c "python3 -m venv /opt/scmedai/.venv"
   - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir --upgrade pip"
-  - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir -r /opt/scmedai/requirements.txt"
+  - su - ubuntu -c "/opt/scmedai/.venv/bin/pip install --no-cache-dir -r /opt/scmedai/requirements-docker.txt"
 
   # ------------------------------------------------------------------
   # 5. Subir a aplicação

@@ -69,7 +69,7 @@ variable "app_bundle_url" {
     URL do pacote da aplicação (.zip) no Object Storage.
 
     O pacote deve conter, na raiz do zip: app.py, src/, prompts/,
-    .streamlit/, escudo_header.png, chroma_db/ e requirements-docker.txt.
+    .streamlit/, escudo_header.png, chroma_db/ e requirements.txt.
 
     Gere um Pre-Authenticated Request (PAR) do objeto no bucket e cole a
     URL aqui. PAR de leitura, com validade que cubra a avaliação.
