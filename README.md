@@ -11,6 +11,23 @@
   <em>Não diagnostica, não prescreve e não decide.</em>
 </p>
 
+Veja o agente funcionando: [https://scmedai.streamlit.app/](https://scmedai.streamlit.app)
+
+## Arquitetura
+
+| Camada | Tecnologia | Responsabilidade |
+| --- | --- | --- |
+| Interface | Streamlit | Chat, histórico de sessão e exibição das citações |
+| Orquestração | LangChain | Pipeline de ingestão, recuperação e geração |
+| Geração | `gemini-2.5-flash` | Respostas ancoradas nos trechos recuperados |
+| Embeddings | `gemini-embedding-001` | Vetorização dos documentos e das perguntas |
+| Banco vetorial | ChromaDB | Armazenamento e busca por similaridade |
+| Publicação | Nginx | Proxy reverso com suporte a WebSocket |
+| Infraestrutura | OCI — VM Ubuntu + Load Balancer | Execução e ponto de entrada estável |
+| Provisionamento | Terraform + cloud-init | Stack no OCI Resource Manager |
+
+> Roda com uma chave gratuita do [Google AI Studio](https://aistudio.google.com) — sem cartão de crédito. O `gemini-2.5-flash` está no tier gratuito.
+
 ## O que ele faz
 
 - Localiza o protocolo pertinente a uma pergunta.
