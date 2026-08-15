@@ -26,54 +26,116 @@ Veja o agente funcionando: [https://scmedai.streamlit.app/](https://scmedai.stre
 | Infraestrutura | OCI — VM Ubuntu + Load Balancer | Execução e ponto de entrada estável |
 | Provisionamento | Terraform + cloud-init | Stack no OCI Resource Manager |
 
-> Roda com uma chave gratuita do [Google AI Studio](https://aistudio.google.com) — sem cartão de crédito. O `gemini-2.5-flash` está no tier gratuito.
+
+### Fluxo RAG
+
+```text
+PDFs → PyPDFLoader → chunks → gemini-embedding-001 → ChromaDB                                                   
+```
+
+**Consulta** — roda na instância, a cada pergunta:
+
+```text
+Pergunta
+   │
+   ├─→ gemini-embedding-001 ─→ ChromaDB ─→ k trechos mais similares
+   │                                              │
+   └──────────────────────────────────────────────┤
+                                                  ▼
+                                          gemini-2.5-flash
+                                                  │
+                                                  ▼
+                                    Resposta + Fonte (documento · página)
+```
 
 ## O que ele faz
 
 - Localiza o protocolo pertinente a uma pergunta.
 - Responde a pergunta citando a fonte do documento, versão, vigência e página.
-- Recupera apenas documentos com status `vigente`.
 - Abstém-se quando a informação não está no corpus.
-- Registra cada consulta em log auditável.
 
 ## O que ele não faz
-
-Escrito antes da lista do que ele faz, de propósito. É esta lista que
-define o nível de risco do sistema.
 
 - Não sugere nem comunica diagnóstico ou prognóstico.
 - Não emite conduta, prescrição ou plano terapêutico.
 - Não avalia caso individual nem calcula dose para paciente específico.
-- Não interpreta exames, laudos ou imagens.
 - Não recebe nem armazena dado identificado de paciente.
 - Não responde nada fora do corpus institucional indexado.
-- Não interage com pacientes.
 
 ---
 
 ## Como rodar
 
+Só é necessária uma chave gratuita do [Google AI Studio](https://aistudio.google.com/apikey)
+— sem cartão de crédito. O `gemini-2.5-flash` está no tier gratuito.
+
 ```bash
+git clone https://github.com/leonardo-lacerda-data/sc_med_ai.git
+cd sc_med_ai
+
 python -m venv .venv
 # Windows:  .venv\Scripts\activate
 # Linux:    source .venv/bin/activate
 
 pip install -r requirements.txt
-
-cp .example .env      # e preencha a GOOGLE_API_KEY
-
-python -m src.pdf_loader     # carrega PDFs e armazena no ChromaDB
 ```
 
-## Estrutura
+Copie o modelo de configuração e preencha a chave:
 
+```bash
+# Windows:  copy .example .env
+# Linux:    cp .example .env
 ```
-data/raw/         PDFs originais dos protocolos
-data/metadata.csv ficha de metadados — sem isto, nada é indexado
-data/index/       índice vetorial (artefato de build, não versionado)
-respostas_esperadas.csv conjunto de referência e resultados de avaliação
-prompts/          prompt de sistema versionado
-src/              ingestão, recuperação, guardrails, cadeia
+
+```env
+GOOGLE_API_KEY=sua-chave-aqui
+```
+
+Suba a aplicação:
+
+```bash
+streamlit run app.py
+```
+
+Abre em `http://localhost:8501`.
+
+```bash
+python -m src.pdf_loader
+```
+
+O processo lê os PDFs, segmenta, gera os embeddings pela API do Gemini e
+grava o índice. Leva cerca de um minuto para o corpus atual.
+
+### Estrutura
+
+```text
+data/                     protocolos em PDF (corpus fictício)
+chroma_db/                índice vetorial
+prompts/                  prompt de sistema
+~/respostas_esperadas.csv conjunto de referência para avaliação das respostas
+src/                      carregamento, indexação e cadeia de recuperação
+app.py                    interface Streamlit
+OCI deploy/               stack Terraform para o OCI Resource Manager
+```
+
+## Deploy OCI
+
+Provisionada por **Terraform** no OCI Resource Manager, inteiramente na
+camada Always Free.
+
+```text
+                    Internet
+                       │
+              Load Balancer (10 Mbps · porta 80)
+                       │            ponto de entrada estável
+                       ▼
+        VM.Standard.E2.1.Micro · 1/8 OCPU · 1 GB RAM
+                       │
+              ┌────────┴────────┐
+              ▼                 ▼
+         nginx :80        Streamlit :8501
+      proxy reverso        serviço systemd
+      (WebSocket)
 ```
 
 ## Stack
