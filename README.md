@@ -137,6 +137,18 @@ camada Always Free.
       proxy reverso        serviço systemd
       (WebSocket)
 ```
+### Resposta sobre AVC
+
+![Resposta AVC](./evidencias/resposta-avc.png)
+
+### Resposta sobre Dor Torácica
+
+![Resposta Dor Torácica](./evidencias/resposta-dor-toracica.png)
+
+### Resposta sobre Sepse
+
+![Resposta Sepse](./evidencias/resposta-sepse.png)
+
 
 ## Stack
 
