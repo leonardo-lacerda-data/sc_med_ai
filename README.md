@@ -139,7 +139,7 @@ camada Always Free.
 ```
 ### Resposta sobre AVC
 
-![Resposta AVC](./evidencias/respostas-avc.png)
+![Resposta AVC](./evidencias/resposta-avc.png)
 
 ### Resposta sobre Dor Torácica
 
@@ -147,7 +147,7 @@ camada Always Free.
 
 ### Resposta sobre Sepse
 
-![Resposta Sepse](./evidencias/respostas-sepse.png)
+![Resposta Sepse](./evidencias/resposta-sepse.png)
 
 
 ## Stack
