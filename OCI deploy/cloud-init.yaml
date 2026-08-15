@@ -7,7 +7,6 @@ packages:
   - python3-venv
   - python3-pip
   - nginx
-  - unzip
   - wget
 
 write_files:
@@ -90,9 +89,10 @@ runcmd:
   - mkdir -p /etc/iptables
   - sh -c 'netfilter-persistent save 2>/dev/null || iptables-save > /etc/iptables/rules.v4'
 
-  - mkdir -p /opt/scmedai /home/ubuntu/arquivos
-  - wget -O /home/ubuntu/arquivos/scmedai.zip "${app_bundle_url}"
-  - unzip -o /home/ubuntu/arquivos/scmedai.zip -d /opt/scmedai
+  - mkdir -p /opt/scmedai
+  - wget -O /tmp/app.tar.gz "${app_source_url}"
+  - tar -xzf /tmp/app.tar.gz -C /opt/scmedai --strip-components=1
+  - rm -f /tmp/app.tar.gz
   - chown -R ubuntu:ubuntu /opt/scmedai
 
   - su - ubuntu -c "python3 -m venv /opt/scmedai/.venv"

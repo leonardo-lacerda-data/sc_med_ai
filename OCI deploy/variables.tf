@@ -7,15 +7,14 @@ variable "AD" {
   default = "1"
 }
 
-variable "vcn_ocid" {
-  description = ""
-  type        = string
+variable "vcn_cidr" {
+  type    = string
+  default = "10.0.0.0/16"
 }
 
-variable "subnet_cidr" {
-  description = ""
-  type        = string
-  default     = "10.0.10.0/24"
+variable "vcn_dns_label" {
+  type    = string
+  default = "scmedai"
 }
 
 variable "image_operating_system" {
@@ -34,7 +33,7 @@ variable "instance_shape" {
 variable "instance_count" {
   description = "Instâncias de aplicação atrás do Load Balancer"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "load_balancer_min_band" {
@@ -54,9 +53,10 @@ variable "cert_passphrase" {
   default     = ""
 }
 
-variable "app_bundle_url" {
-  description = "URL do pacote .zip da aplicação no Object Storage"
+variable "app_source_url" {
+  description = "Tarball do repositorio, ex: https://github.com/usuario/repo/archive/refs/heads/main.tar.gz"
   type        = string
+  default     = "https://github.com/leonardo-lacerda-data/sc_med_ai/archive/refs/heads/main.tar.gz"
 }
 
 variable "google_api_key" {

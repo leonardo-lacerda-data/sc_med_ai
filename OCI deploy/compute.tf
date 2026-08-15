@@ -1,6 +1,6 @@
 locals {
   user_data = templatefile("${path.module}/cloud-init.yaml", {
-    app_bundle_url         = var.app_bundle_url
+    app_source_url         = var.app_source_url
     google_api_key         = var.google_api_key
     gemini_chat_model      = var.gemini_chat_model
     gemini_embedding_model = var.gemini_embedding_model

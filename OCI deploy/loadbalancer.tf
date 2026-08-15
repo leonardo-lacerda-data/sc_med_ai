@@ -11,15 +11,10 @@ resource "oci_load_balancer_load_balancer" "Load_Balancer" {
   }
 }
 
-resource "oci_load_balancer_backend_set" "web-servers-backend" {
+resource "oci_load_balancer_backend_set" "scmedai-backend" {
   load_balancer_id = oci_load_balancer_load_balancer.Load_Balancer.id
-  name             = "web-servers-backend"
+  name             = "scmedai-backend"
   policy           = "ROUND_ROBIN"
-
-  session_persistence_configuration {
-    cookie_name      = "X-Oracle-BMC-LBS-Route"
-    disable_fallback = false
-  }
 
   health_checker {
     interval_ms         = "10000"
@@ -36,7 +31,7 @@ resource "oci_load_balancer_backend_set" "web-servers-backend" {
 resource "oci_load_balancer_backend" "app" {
   count = var.instance_count
 
-  backendset_name  = oci_load_balancer_backend_set.web-servers-backend.name
+  backendset_name  = oci_load_balancer_backend_set.scmedai-backend.name
   load_balancer_id = oci_load_balancer_load_balancer.Load_Balancer.id
   ip_address       = oci_core_instance.app[count.index].private_ip
   port             = "80"
@@ -50,7 +45,7 @@ resource "oci_load_balancer_listener" "lb-listener-http" {
   connection_configuration {
     idle_timeout_in_seconds = "300"
   }
-  default_backend_set_name = oci_load_balancer_backend_set.web-servers-backend.name
+  default_backend_set_name = oci_load_balancer_backend_set.scmedai-backend.name
   load_balancer_id         = oci_load_balancer_load_balancer.Load_Balancer.id
   name                     = "lb-listener-http"
   port                     = "80"

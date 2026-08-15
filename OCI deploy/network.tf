@@ -1,24 +1,32 @@
-data "oci_core_internet_gateways" "igw" {
+resource "oci_core_virtual_network" "vcn" {
   compartment_id = var.compartment_ocid
-  vcn_id         = var.vcn_ocid
-  state          = "AVAILABLE"
+  cidr_block     = var.vcn_cidr
+  dns_label      = var.vcn_dns_label
+  display_name   = var.vcn_dns_label
+}
+
+resource "oci_core_internet_gateway" "igw" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.vcn.id
+  display_name   = "${var.vcn_dns_label}-igw"
+  enabled        = true
 }
 
 resource "oci_core_route_table" "public_rt" {
   compartment_id = var.compartment_ocid
-  vcn_id         = var.vcn_ocid
-  display_name   = "scmedai-public-rt"
+  vcn_id         = oci_core_virtual_network.vcn.id
+  display_name   = "${var.vcn_dns_label}-public-rt"
 
   route_rules {
     destination       = "0.0.0.0/0"
-    network_entity_id = data.oci_core_internet_gateways.igw.gateways[0].id
+    network_entity_id = oci_core_internet_gateway.igw.id
   }
 }
 
 resource "oci_core_security_list" "sl_public" {
-  display_name   = "scmedai-sl-public"
+  display_name   = "${var.vcn_dns_label}-sl-public"
   compartment_id = var.compartment_ocid
-  vcn_id         = var.vcn_ocid
+  vcn_id         = oci_core_virtual_network.vcn.id
 
   egress_security_rules {
     protocol    = "all"
@@ -55,11 +63,11 @@ resource "oci_core_security_list" "sl_public" {
 
 resource "oci_core_subnet" "public_subnet" {
   compartment_id = var.compartment_ocid
-  vcn_id         = var.vcn_ocid
-  cidr_block     = var.subnet_cidr
+  vcn_id         = oci_core_virtual_network.vcn.id
+  cidr_block     = cidrsubnet(var.vcn_cidr, 8, 1)
 
   display_name = "scmedai-public-subnet"
-  dns_label    = "scmedai"
+  dns_label    = "public"
 
   route_table_id             = oci_core_route_table.public_rt.id
   security_list_ids          = [oci_core_security_list.sl_public.id]
