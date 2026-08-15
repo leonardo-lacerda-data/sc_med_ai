@@ -143,7 +143,7 @@ camada Always Free.
 
 ### Resposta sobre Dor Torácica
 
-![Resposta Dor Torácica](./evidencias/resposta-dor-toracica.png)
+![Resposta Dor Torácica](./evidencias/resposta-dor-torácica.png)
 
 ### Resposta sobre Sepse
 
