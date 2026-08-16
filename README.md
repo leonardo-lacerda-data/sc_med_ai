@@ -11,6 +11,27 @@
   <em>Não diagnostica, não prescreve e não decide.</em>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white" alt="LangChain">
+  <img src="https://img.shields.io/badge/Gemini-2.5%20Flash-8E75B2?style=flat-square&logo=googlegemini&logoColor=white" alt="Google Gemini">
+  <img src="https://img.shields.io/badge/ChromaDB-4F9B7A?style=flat-square" alt="ChromaDB">
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Terraform-7B42BC?style=flat-square&logo=terraform&logoColor=white" alt="Terraform">
+  <img src="https://img.shields.io/badge/Oracle_Cloud-F80000?style=flat-square&logo=oracle&logoColor=white" alt="Oracle Cloud Infrastructure">
+  <img src="https://img.shields.io/badge/NGINX-009639?style=flat-square&logo=nginx&logoColor=white" alt="NGINX">
+  <img src="https://img.shields.io/badge/cloud--init-2B4A6F?style=flat-square" alt="cloud-init">
+</p>
+
+<p align="center">
+  <a href="http://http://152.67.40.18/"><img src="https://img.shields.io/badge/demonstração-online-4F9B7A?style=flat-square" alt="Demo"></a>
+</p>
+
+![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-red)
+
 Veja o agente funcionando: [https://scmedai.streamlit.app/](https://scmedai.streamlit.app)
 
 ## Arquitetura
@@ -149,6 +170,15 @@ camada Always Free.
 
 ![Resposta Sepse](./evidencias/resposta-sepse.png)
 
+## Licença
+
+SCMedAI está sob a **PolyForm Noncommercial License 1.0.0** — veja [`LICENSE.md`](LICENSE.md).
+
+Uso permitido para estudo, pesquisa, projetos pessoais e instituições
+educacionais/públicas. **Uso comercial por terceiros não é autorizado.**
+Para licenciamento comercial: [seu e-mail]
+
+Required Notice: Copyright 2026 Leonardo Lacerda
 
 ## Stack
 
