@@ -27,9 +27,17 @@
 </p>
 
 
-![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-red)
-
 Veja o agente funcionando: [https://scmedai.streamlit.app/](https://scmedai.streamlit.app)
+
+## Licença
+
+SCMedAI está sob a **PolyForm Noncommercial License 1.0.0** — veja [`LICENSE.md`](LICENSE.md).
+
+Uso permitido para estudo, pesquisa, projetos pessoais e instituições
+educacionais/públicas. **Uso comercial por terceiros não é autorizado.**
+Para licenciamento comercial: [seu e-mail]
+
+Required Notice: Copyright 2026 Leonardo Lacerda
 
 ## Arquitetura
 
