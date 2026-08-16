@@ -26,9 +26,6 @@
   <img src="https://img.shields.io/badge/cloud--init-2B4A6F?style=flat-square" alt="cloud-init">
 </p>
 
-<p align="center">
-  <a href="http://http://152.67.40.18/"><img src="https://img.shields.io/badge/demonstração-online-4F9B7A?style=flat-square" alt="Demo"></a>
-</p>
 
 ![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-red)
 
@@ -180,7 +177,3 @@ Para licenciamento comercial: [seu e-mail]
 
 Required Notice: Copyright 2026 Leonardo Lacerda
 
-## Stack
-
-LangChain · Google Gemini · ChromaDB · Streamlit
-Implantação em Oracle Cloud Infrastructure.
