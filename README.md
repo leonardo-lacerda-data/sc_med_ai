@@ -35,7 +35,7 @@ SCMedAI está sob a **PolyForm Noncommercial License 1.0.0** — veja [`LICENSE.
 
 Uso permitido para estudo, pesquisa, projetos pessoais e instituições
 educacionais/públicas. **Uso comercial por terceiros não é autorizado.**
-Para licenciamento comercial: [seu e-mail]
+Para licenciamento comercial: leonardo.a.lacerda1@gmail.com
 
 Required Notice: Copyright 2026 Leonardo Lacerda
 
